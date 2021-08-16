@@ -68,3 +68,19 @@ it('should show the shorten url', async () => {
         ).toBeInTheDocument();
     });
 });
+
+it('should show an error message when the api request fails', async () => {
+    render(<ShortenUrlForm />);
+    const input = screen.getByRole('textbox', { name: /url/i });
+    fireEvent.change(input, {
+        target: { value: 'this is not an url' },
+    });
+    const button = screen.getByRole('button', {
+        name: /shorten and copy url/i,
+    });
+    fireEvent.click(button);
+    await waitFor(() => {
+        expect(screen.getByText(/error/i)).toBeInTheDocument();
+        expect(screen.getByText(/something happened/i)).toBeInTheDocument();
+    });
+});

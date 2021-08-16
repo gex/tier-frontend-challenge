@@ -7,6 +7,7 @@ const ShortenUrlForm = () => {
     const [value, setValue] = useState('');
     const [result, setResult] = useState({
         url: null,
+        error: null,
         isLoading: false,
     });
 
@@ -28,19 +29,26 @@ const ShortenUrlForm = () => {
         async (e) => {
             e.preventDefault();
             try {
-                setResult({ url: null, isLoading: true });
+                setResult({ url: null, error: null, isLoading: true });
                 const response = await requestShortenedUrl(value);
                 const data = await response.json();
                 if (!response.ok) {
                     throw new Error(data.message);
                 }
                 if (isMounted.current) {
-                    setResult({ url: data.link, isLoading: false });
+                    setResult({
+                        url: data.link,
+                        error: null,
+                        isLoading: false,
+                    });
                 }
             } catch (error) {
-                console.log(error);
                 if (isMounted.current) {
-                    setResult({ url: null, isLoading: false });
+                    setResult({
+                        url: null,
+                        error: error.message,
+                        isLoading: false,
+                    });
                 }
             }
         },
@@ -69,6 +77,17 @@ const ShortenUrlForm = () => {
                 <div>
                     <h2>Result</h2>
                     <p>Short url: {result.url}</p>
+                </div>
+            )}
+
+            {result.error && (
+                <div>
+                    <h2>Error</h2>
+                    <p>Something happened</p>
+                    <details>
+                        <summary>Tech blah blah</summary>
+                        {result.error}
+                    </details>
                 </div>
             )}
         </main>
