@@ -24,6 +24,10 @@ beforeAll(() => {
     server.listen();
 });
 
+afterEach(() => {
+    jest.resetAllMocks();
+});
+
 afterAll(() => {
     server.close();
 });
@@ -62,7 +66,9 @@ it('should show the shorten url', async () => {
     });
     fireEvent.click(button);
     await waitFor(() => {
-        expect(screen.getByText(/short url/i)).toBeInTheDocument();
+        expect(
+            screen.getByRole('heading', { name: /short url/i }),
+        ).toBeInTheDocument();
         expect(
             screen.getByText(/https:\/\/bit\.ly\/tier/i),
         ).toBeInTheDocument();
@@ -80,7 +86,9 @@ it('should show an error message when the api request fails', async () => {
     });
     fireEvent.click(button);
     await waitFor(() => {
-        expect(screen.getByText(/error/i)).toBeInTheDocument();
+        expect(
+            screen.getByRole('heading', { name: /error/i }),
+        ).toBeInTheDocument();
         expect(screen.getByText(/something happened/i)).toBeInTheDocument();
     });
 });
@@ -96,10 +104,28 @@ it('reset state when the input changes', async () => {
     });
     fireEvent.click(button);
     await waitFor(() => {
-        screen.getByText(/short url/i);
+        screen.getByRole('heading', { name: /short url/i });
     });
     fireEvent.change(input, {
         target: { value: 'another url or something like that' },
     });
     expect(screen.queryByText(/result/i)).not.toBeInTheDocument();
+});
+
+it('should copy the url to the clipboard', async () => {
+    render(<ShortenUrlForm />);
+    const input = screen.getByRole('textbox', { name: /url/i });
+    fireEvent.change(input, {
+        target: { value: 'https://www.tier.app' },
+    });
+    const button = screen.getByRole('button', {
+        name: /shorten and copy url/i,
+    });
+    fireEvent.click(button);
+    await waitFor(() => {
+        expect(global.navigator.clipboard.writeText).toHaveBeenCalledTimes(1);
+        expect(global.navigator.clipboard.writeText).toHaveBeenCalledWith(
+            'https://bit.ly/tier',
+        );
+    });
 });

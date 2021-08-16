@@ -79,6 +79,15 @@ p.url {
     text-align: center;
 }
 
+p.hint {
+    font-size: 1.5rem;
+    text-align: center;
+}
+
+details {
+    font-size: 1.5rem;
+}
+
 @media screen and (min-width: 960px) {
     .box {
         padding: 2rem;

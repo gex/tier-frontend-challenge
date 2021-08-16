@@ -47,6 +47,8 @@ const ShortenUrlForm = () => {
                         isLoading: false,
                     });
                 }
+                // TODO: polyfill based on https://caniuse.com/async-clipboard
+                await navigator.clipboard.writeText(data.link);
             } catch (error) {
                 if (isMounted.current) {
                     setResult({
@@ -90,6 +92,10 @@ const ShortenUrlForm = () => {
                     <h2>Short URL</h2>
                     <p className="url">
                         <a href={result.url}>{result.url}</a>
+                    </p>
+                    <p className="hint">
+                        The short URL has been also copied to your clipbord,
+                        btw.
                     </p>
                 </Box>
             )}
