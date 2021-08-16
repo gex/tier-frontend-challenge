@@ -1,42 +1,33 @@
-.App {
-  text-align: center;
-  padding: 15px;
-}
-
-.App-logo {
-  height: 50px;
-  pointer-events: none;
-}
-
-input[type=text] {
-  padding: .375rem .75rem;
-    font-size: 1rem;
-    line-height: 1.5;
-  margin: 8px;
-  box-sizing: border-box;
-  border: none;
-  background: #f8f9fa;
-  border-bottom: 2px solid #69D2AA;
-}
-
-input[type="submit"] {
-    color: #343A40;
-    background-color: #69D2AA;
-    border-color: #69D2AA;
-    cursor: pointer;
-    display: inline-block;
-    font-weight: 400;
-    color: #343A40;
+.header {
+    background: #00103c;
+    color: #69d2aa;
+    border-radius: 1rem;
+    display: flex;
+    flex-direction: column;
+    padding: 2.5rem 2rem 2rem;
     text-align: center;
-    vertical-align: middle;
-    border: 1px solid transparent;
-    padding: .375rem .75rem;
-    font-size: 1rem;
-    line-height: 1.5;
-    border-radius: .25rem;
-
 }
 
-input[type="submit"]:hover {
-  color: #fff;
+.header img {
+    height: 3rem;
+}
+
+.header p {
+    margin: 1rem 0 0;
+}
+
+@media screen and (min-width: 960px) {
+    .header {
+        flex-direction: row;
+        padding-top: 2rem;
+        text-align: left;
+    }
+
+    .header img {
+        margin: 0 1rem;
+    }
+
+    .header p {
+        margin: 0 1rem;
+    }
 }

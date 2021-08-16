@@ -1,5 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import '../css/ShortenUrlForm.css';
 import { requestShortenedUrl } from '../utils/api';
+import Box from './Box';
 
 const ShortenUrlForm = () => {
     const isMounted = useRef(false);
@@ -60,38 +62,47 @@ const ShortenUrlForm = () => {
 
     return (
         <main>
-            <form onSubmit={onSubmit}>
-                <label htmlFor="shorten">
-                    Url:
-                    <input
-                        placeholder="Url to shorten"
-                        id="shorten"
-                        type="text"
-                        value={value}
-                        onChange={onChange}
-                    />
-                </label>
-                <input type="submit" value="Shorten and copy URL" />
-            </form>
+            <h1>The Great URL Shortener</h1>
+            <Box className="form">
+                <form onSubmit={onSubmit}>
+                    <label htmlFor="shorten">
+                        <span>Url</span>
+                        <input
+                            placeholder="Url to shorten"
+                            id="shorten"
+                            type="text"
+                            value={value}
+                            onChange={onChange}
+                        />
+                    </label>
+                    <input type="submit" value="Shorten and copy URL" />
+                </form>
+            </Box>
 
-            {result.isLoading && <div>Loading...</div>}
+            {result.isLoading && (
+                <Box className="loading">
+                    <h2>Loading...</h2>
+                </Box>
+            )}
 
             {result.url && (
-                <div>
-                    <h2>Result</h2>
-                    <p>Short url: {result.url}</p>
-                </div>
+                <Box className="result">
+                    <h2>Short URL</h2>
+                    <p className="url">
+                        <a href={result.url}>{result.url}</a>
+                    </p>
+                </Box>
             )}
 
             {result.error && (
-                <div>
+                <Box className="error">
                     <h2>Error</h2>
                     <p>Something happened</p>
                     <details>
                         <summary>Tech blah blah</summary>
                         {result.error}
                     </details>
-                </div>
+                </Box>
             )}
         </main>
     );

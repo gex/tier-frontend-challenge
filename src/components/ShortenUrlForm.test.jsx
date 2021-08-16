@@ -62,7 +62,7 @@ it('should show the shorten url', async () => {
     });
     fireEvent.click(button);
     await waitFor(() => {
-        expect(screen.getByText(/result/i)).toBeInTheDocument();
+        expect(screen.getByText(/short url/i)).toBeInTheDocument();
         expect(
             screen.getByText(/https:\/\/bit\.ly\/tier/i),
         ).toBeInTheDocument();
@@ -96,7 +96,7 @@ it('reset state when the input changes', async () => {
     });
     fireEvent.click(button);
     await waitFor(() => {
-        screen.getByText(/result/i);
+        screen.getByText(/short url/i);
     });
     fireEvent.change(input, {
         target: { value: 'another url or something like that' },
