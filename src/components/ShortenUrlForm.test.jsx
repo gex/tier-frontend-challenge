@@ -38,6 +38,19 @@ it('should render an input and a button', () => {
     expect(button).toBeInTheDocument();
 });
 
+it('should show loading after clicking on the button', () => {
+    render(<ShortenUrlForm />);
+    const input = screen.getByRole('textbox', { name: /url/i });
+    fireEvent.change(input, {
+        target: { value: 'https://www.tier.app' },
+    });
+    const button = screen.getByRole('button', {
+        name: /shorten and copy url/i,
+    });
+    fireEvent.click(button);
+    expect(screen.getByText(/loading/i)).toBeInTheDocument();
+});
+
 it('should show the shorten url', async () => {
     render(<ShortenUrlForm />);
     const input = screen.getByRole('textbox', { name: /url/i });

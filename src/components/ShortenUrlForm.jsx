@@ -1,9 +1,21 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { requestShortenedUrl } from '../utils/api';
 
 const ShortenUrlForm = () => {
+    const isMounted = useRef(false);
+
     const [value, setValue] = useState('');
-    const [url, setUrl] = useState(null);
+    const [result, setResult] = useState({
+        url: null,
+        isLoading: false,
+    });
+
+    useEffect(() => {
+        isMounted.current = true;
+        return () => {
+            isMounted.current = false;
+        };
+    }, []);
 
     const onChange = useCallback(
         (e) => {
@@ -16,17 +28,23 @@ const ShortenUrlForm = () => {
         async (e) => {
             e.preventDefault();
             try {
+                setResult({ url: null, isLoading: true });
                 const response = await requestShortenedUrl(value);
                 const data = await response.json();
                 if (!response.ok) {
                     throw new Error(data.message);
                 }
-                setUrl(data.link);
+                if (isMounted.current) {
+                    setResult({ url: data.link, isLoading: false });
+                }
             } catch (error) {
                 console.log(error);
+                if (isMounted.current) {
+                    setResult({ url: null, isLoading: false });
+                }
             }
         },
-        [value, setUrl],
+        [isMounted, value, setResult],
     );
 
     return (
@@ -45,10 +63,12 @@ const ShortenUrlForm = () => {
                 <input type="submit" value="Shorten and copy URL" />
             </form>
 
-            {url && (
+            {result.isLoading && <div>Loading...</div>}
+
+            {result.url && (
                 <div>
                     <h2>Result</h2>
-                    <p>Short url: {url}</p>
+                    <p>Short url: {result.url}</p>
                 </div>
             )}
         </main>
