@@ -2,7 +2,8 @@ import React from 'react';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { setupServer } from 'msw/node';
 import { rest } from 'msw';
-import ShortenUrlForm, { API_URL } from './ShortenUrlForm';
+import { API_URL } from '../utils/api';
+import ShortenUrlForm from './ShortenUrlForm';
 
 const server = setupServer();
 
