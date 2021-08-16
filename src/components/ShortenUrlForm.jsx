@@ -21,8 +21,11 @@ const ShortenUrlForm = () => {
     const onChange = useCallback(
         (e) => {
             setValue(e.target.value);
+            // updating the state doesn't prevent a pending request to resolve in the future though
+            // TODO: use AbortController
+            setResult({ url: null, error: null, isLoading: false });
         },
-        [setValue],
+        [setValue, setResult],
     );
 
     const onSubmit = useCallback(

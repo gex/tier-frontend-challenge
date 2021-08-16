@@ -84,3 +84,22 @@ it('should show an error message when the api request fails', async () => {
         expect(screen.getByText(/something happened/i)).toBeInTheDocument();
     });
 });
+
+it('reset state when the input changes', async () => {
+    render(<ShortenUrlForm />);
+    const input = screen.getByRole('textbox', { name: /url/i });
+    fireEvent.change(input, {
+        target: { value: 'https://www.tier.app' },
+    });
+    const button = screen.getByRole('button', {
+        name: /shorten and copy url/i,
+    });
+    fireEvent.click(button);
+    await waitFor(() => {
+        screen.getByText(/result/i);
+    });
+    fireEvent.change(input, {
+        target: { value: 'another url or something like that' },
+    });
+    expect(screen.queryByText(/result/i)).not.toBeInTheDocument();
+});
