@@ -1,31 +1,66 @@
-/* eslint no-unused-vars: 1 */
-
 import React, { useCallback, useState } from 'react';
+
+export const API_URL = 'https://api-ssl.bitly.com/v4/shorten';
+const TOKEN = process.env.REACT_APP_BITLY_AUTHORIZATION_TOKEN; // 😱
 
 const ShortenUrlForm = () => {
     const [value, setValue] = useState('');
+    const [url, setUrl] = useState(null);
 
-    const onChange = useCallback((e) => {
-        // TODO: Set the component's new state based on the user's input
-    }, [/* TODO: Add necessary deps */]);
+    const onChange = useCallback(
+        (e) => {
+            setValue(e.target.value);
+        },
+        [setValue],
+    );
 
-    const onSubmit = useCallback((e) => {
-        e.preventDefault();
-        // TODO: shorten url and copy to clipboard
-    }, [/* TODO: necessary deps */]);
+    const onSubmit = useCallback(
+        async (e) => {
+            e.preventDefault();
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${TOKEN}`,
+                    },
+                    body: JSON.stringify({ long_url: value }),
+                });
+                const data = await response.json();
+                if (!response.ok) {
+                    throw new Error(data.message);
+                }
+                setUrl(data.link);
+            } catch (error) {
+                console.log(error);
+            }
+        },
+        [value, setUrl],
+    );
 
     return (
-        <form onSubmit={onSubmit}>
-            <label htmlFor="shorten">
-                Url:
-                <input placeholder="Url to shorten" id="shorten" type="text" value={value} onChange={onChange} />
-            </label>
-            <input type="submit" value="Shorten and copy URL" />
-            {/* TODO: show below only when the url has been shortened and copied */}
-            <div>
-                {/* Show shortened url --- copied! */}
-            </div>
-        </form>
+        <main>
+            <form onSubmit={onSubmit}>
+                <label htmlFor="shorten">
+                    Url:
+                    <input
+                        placeholder="Url to shorten"
+                        id="shorten"
+                        type="text"
+                        value={value}
+                        onChange={onChange}
+                    />
+                </label>
+                <input type="submit" value="Shorten and copy URL" />
+            </form>
+
+            {url && (
+                <div>
+                    <h2>Result</h2>
+                    <p>Short url: {url}</p>
+                </div>
+            )}
+        </main>
     );
 };
 

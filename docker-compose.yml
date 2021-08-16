@@ -10,6 +10,8 @@ services:
             - '${PORT:-3000}:${PORT:-3000}'
         environment:
             PORT: ${PORT:-3000}
+            # https://create-react-app.dev/docs/adding-custom-environment-variables/
+            REACT_APP_BITLY_AUTHORIZATION_TOKEN: ${BITLY_AUTHORIZATION_TOKEN}
 
 volumes:
     node-modules:
