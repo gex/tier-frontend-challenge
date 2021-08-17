@@ -1,10 +1,11 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import '../css/ShortenUrlForm.css';
+import useIsMounted from '../utils/useIsMounted';
 import { requestShortenedUrl } from '../utils/api';
 import Box from './Box';
 
 const ShortenUrlForm = () => {
-    const isMounted = useRef(false);
+    const isMounted = useIsMounted();
 
     const [value, setValue] = useState('');
     const [result, setResult] = useState({
@@ -12,13 +13,6 @@ const ShortenUrlForm = () => {
         error: null,
         isLoading: false,
     });
-
-    useEffect(() => {
-        isMounted.current = true;
-        return () => {
-            isMounted.current = false;
-        };
-    }, []);
 
     const onChange = useCallback(
         (e) => {
