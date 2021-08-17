@@ -1,8 +1,8 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import '../css/ShortenUrlForm.css';
 import useIsMounted from '../utils/useIsMounted';
 import { requestShortenedUrl } from '../utils/api';
-import Box from './Box';
+import Form from './ui/Form';
 
 const ShortenUrlForm = () => {
     const isMounted = useIsMounted();
@@ -15,8 +15,8 @@ const ShortenUrlForm = () => {
     });
 
     const onChange = useCallback(
-        (e) => {
-            setValue(e.target.value);
+        (newValue) => {
+            setValue(newValue);
             // updating the state doesn't prevent a pending request to resolve in the future though
             // TODO: use AbortController
             setResult({ url: null, error: null, isLoading: false });
@@ -24,61 +24,54 @@ const ShortenUrlForm = () => {
         [setValue, setResult],
     );
 
-    const onSubmit = useCallback(
-        async (e) => {
-            e.preventDefault();
-            try {
-                setResult({ url: null, error: null, isLoading: true });
-                const data = await requestShortenedUrl(value);
-                if (isMounted.current) {
-                    setResult({
-                        url: data.link,
-                        error: null,
-                        isLoading: false,
-                    });
-                }
-                // TODO: polyfill based on https://caniuse.com/async-clipboard
-                await navigator.clipboard.writeText(data.link);
-            } catch (error) {
-                if (isMounted.current) {
-                    setResult({
-                        url: null,
-                        error: error.message,
-                        isLoading: false,
-                    });
-                }
+    const onSubmit = useCallback(async () => {
+        try {
+            setResult({ url: null, error: null, isLoading: true });
+            const data = await requestShortenedUrl(value);
+            if (isMounted.current) {
+                setResult({
+                    url: data.link,
+                    error: null,
+                    isLoading: false,
+                });
             }
-        },
-        [isMounted, value, setResult],
-    );
+            // TODO: polyfill based on https://caniuse.com/async-clipboard
+            await navigator.clipboard.writeText(data.link);
+        } catch (error) {
+            if (isMounted.current) {
+                setResult({
+                    url: null,
+                    error: error.message,
+                    isLoading: false,
+                });
+            }
+        }
+    }, [isMounted, value, setResult]);
 
     return (
         <main>
             <h1>The Great URL Shortener</h1>
-            <Box className="form">
-                <form onSubmit={onSubmit}>
-                    <label htmlFor="shorten">
-                        <span>Url</span>
-                        <input
-                            placeholder="Url to shorten"
-                            id="shorten"
-                            type="text"
-                            value={value}
-                            onChange={onChange}
-                        />
-                    </label>
-                    <input type="submit" value="Shorten and copy URL" />
-                </form>
-            </Box>
+
+            <div className="box">
+                <Form
+                    inputId="shorten"
+                    inputLabel="URL"
+                    placeholder="URL to shorten"
+                    submitLabel="Shorten and copy URL"
+                    value={value}
+                    onChange={onChange}
+                    onSubmit={onSubmit}
+                />
+            </div>
 
             {result.isLoading && (
-                <Box className="loading">
+                <div className="box">
                     <h2>Loading...</h2>
-                </Box>
+                </div>
             )}
 
             {result.url && (
-                <Box className="result">
+                <div className="box">
                     <h2>Short URL</h2>
                     <p className="url">
                         <a href={result.url}>{result.url}</a>
@@ -87,18 +80,20 @@ const ShortenUrlForm = () => {
                         The short URL has been also copied to your clipbord,
                         btw.
                     </p>
-                </Box>
+                </div>
             )}
 
             {result.error && (
-                <Box className="error">
+                <div className="box">
                     <h2>Error</h2>
-                    <p>Something happened</p>
-                    <details>
-                        <summary>Tech blah blah</summary>
-                        {result.error}
-                    </details>
-                </Box>
+                    <div className="error">
+                        <p>Something terrible happened</p>
+                        <details>
+                            <summary>Details for techies</summary>
+                            {result.error}
+                        </details>
+                    </div>
+                </div>
             )}
         </main>
     );

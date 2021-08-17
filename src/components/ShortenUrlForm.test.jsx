@@ -91,7 +91,9 @@ it('should show an error message when the api request fails', async () => {
         expect(
             screen.getByRole('heading', { name: /error/i }),
         ).toBeInTheDocument();
-        expect(screen.getByText(/something happened/i)).toBeInTheDocument();
+        expect(
+            screen.getByText(/something terrible happened/i),
+        ).toBeInTheDocument();
     });
 });
 
