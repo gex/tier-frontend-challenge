@@ -52,7 +52,9 @@ it('should show loading after clicking on the button', () => {
         name: /shorten and copy url/i,
     });
     fireEvent.click(button);
-    expect(screen.getByText(/loading/i)).toBeInTheDocument();
+    expect(
+        screen.getByRole('heading', { name: /loading/i }),
+    ).toBeInTheDocument();
 });
 
 it('should show the shorten url', async () => {
