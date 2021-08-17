@@ -1,6 +1,6 @@
 .header {
-    background: #00103c;
-    color: #69d2aa;
+    background: rgb(0, 16, 60);
+    color: rgb(105, 210, 170);
     border-radius: 1rem;
     display: flex;
     flex-direction: column;

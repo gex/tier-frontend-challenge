@@ -11,9 +11,9 @@ h1 {
 }
 
 .box {
-    background: #fff;
+    background: rgb(255, 255, 255);
     border-radius: 1rem;
-    color: #00103c;
+    color: rgb(0, 16, 60);
     margin: 3rem 0;
     padding: 1rem;
 }
@@ -22,10 +22,6 @@ h1 {
     font-size: 3rem;
     margin: 0 0 1rem;
     text-align: center;
-}
-
-.box p {
-    margin: 0.5rem 0;
 }
 
 form {
@@ -43,45 +39,61 @@ label {
 
 input[type='text'] {
     background: rgba(105, 210, 170, 0.1);
-    border: solid #69d2aa;
+    border-color: transparent transparent rgb(105, 210, 170);
     border-radius: 1rem;
-    border-width: 0 0 0.2rem;
-    color: #00103c;
+    border-style: solid;
+    border-width: 0.2rem;
+    color: rgb(105, 210, 170);
+    height: 5rem;
     margin: 1rem 0;
     padding: 1rem 0.5rem;
     text-align: center;
 }
 input[type='text']::placeholder {
-    color: rgba(0, 16, 60, 0.5);
+    color: rgba(105, 210, 170, 0.75);
 }
 input[type='text']:focus {
-    background: rgba(105, 210, 170, 0.25);
+    border-color: rgba(105, 210, 170, 0.1) rgba(105, 210, 170, 0.1)
+        rgb(105, 210, 170);
     outline: none;
 }
 input[type='text']:focus::placeholder {
-    color: rgba(0, 16, 60, 0.2);
+    color: rgba(105, 210, 170, 0.5);
 }
 
 input[type='submit'] {
-    background: #69d2aa;
+    background: rgb(105, 210, 170);
     border: none;
     border-radius: 1rem;
-    color: #fff;
+    color: rgb(255, 255, 255);
+    height: 5rem;
     padding: 1rem;
+}
+
+.box p {
+    margin: 0.5rem 0;
 }
 
 p.url {
     background: rgba(105, 210, 170, 0.1);
     border-radius: 1rem;
     font-weight: bold;
+    height: 5rem;
+    line-height: 5rem;
     margin: 0;
-    padding: 1rem;
     text-align: center;
 }
 
 p.hint {
     font-size: 1.5rem;
     text-align: center;
+}
+
+.box .error {
+    background: rgb(254, 226, 226);
+    color: rgb(248, 113, 113);
+    border-radius: 1rem;
+    padding: 1rem;
 }
 
 details {
