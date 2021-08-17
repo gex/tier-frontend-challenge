@@ -2,6 +2,7 @@ import React, { useCallback, useState } from 'react';
 import '../css/ShortenUrlForm.css';
 import useIsMounted from '../utils/useIsMounted';
 import { requestShortenedUrl } from '../utils/api';
+import { copyToClipboard } from '../utils/clipboard';
 import Form from './ui/Form';
 import Input from './ui/Input';
 
@@ -29,6 +30,7 @@ const ShortenUrlForm = () => {
         try {
             setResult({ url: null, error: null, isLoading: true });
             const data = await requestShortenedUrl(value);
+            await copyToClipboard(data.link);
             if (isMounted.current) {
                 setResult({
                     url: data.link,
@@ -36,8 +38,6 @@ const ShortenUrlForm = () => {
                     isLoading: false,
                 });
             }
-            // TODO: polyfill based on https://caniuse.com/async-clipboard
-            await navigator.clipboard.writeText(data.link);
         } catch (error) {
             if (isMounted.current) {
                 setResult({
