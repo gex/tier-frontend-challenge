@@ -29,11 +29,7 @@ const ShortenUrlForm = () => {
             e.preventDefault();
             try {
                 setResult({ url: null, error: null, isLoading: true });
-                const response = await requestShortenedUrl(value);
-                const data = await response.json();
-                if (!response.ok) {
-                    throw new Error(data.message);
-                }
+                const data = await requestShortenedUrl(value);
                 if (isMounted.current) {
                     setResult({
                         url: data.link,

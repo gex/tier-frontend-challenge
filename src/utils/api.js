@@ -2,8 +2,8 @@ const TOKEN = process.env.REACT_APP_BITLY_AUTHORIZATION_TOKEN; // don't ever do 
 
 export const API_URL = 'https://api-ssl.bitly.com/v4/shorten';
 
-export function requestShortenedUrl(url) {
-    return fetch(API_URL, {
+export async function requestShortenedUrl(url) {
+    const response = await fetch(API_URL, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -11,4 +11,9 @@ export function requestShortenedUrl(url) {
         },
         body: JSON.stringify({ long_url: url }),
     });
+    const data = await response.json();
+    if (!response.ok) {
+        throw new Error(`Error code: ${data.message}`);
+    }
+    return data;
 }
