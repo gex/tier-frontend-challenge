@@ -17,7 +17,7 @@ const Form = ({
     };
 
     return (
-        <form onSubmit={onFormSubmit}>
+        <form className="form" onSubmit={onFormSubmit}>
             <Input
                 id={inputId}
                 label={inputLabel}

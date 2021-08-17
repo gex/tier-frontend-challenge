@@ -18,13 +18,17 @@ h1 {
     padding: 1rem;
 }
 
+.box.demo {
+    background: rgba(255, 255, 255, 0.5);
+}
+
 .box h2 {
     font-size: 3rem;
     margin: 0 0 1rem;
     text-align: center;
 }
 
-form {
+.form {
     display: flex;
     flex-direction: column;
 }

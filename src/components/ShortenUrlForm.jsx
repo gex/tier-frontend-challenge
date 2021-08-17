@@ -3,6 +3,7 @@ import '../css/ShortenUrlForm.css';
 import useIsMounted from '../utils/useIsMounted';
 import { requestShortenedUrl } from '../utils/api';
 import Form from './ui/Form';
+import Input from './ui/Input';
 
 const ShortenUrlForm = () => {
     const isMounted = useIsMounted();
@@ -47,6 +48,15 @@ const ShortenUrlForm = () => {
             }
         }
     }, [isMounted, value, setResult]);
+
+    // demonstrate the skipped rerenderings of the memoized components
+    const [forcedRerenderingText, setForcedRerenderingText] = useState('');
+    const onForcedRerenderingTextChange = useCallback(
+        (newValue) => {
+            setForcedRerenderingText(newValue);
+        },
+        [setForcedRerenderingText],
+    );
 
     return (
         <main>
@@ -95,6 +105,18 @@ const ShortenUrlForm = () => {
                     </div>
                 </div>
             )}
+
+            <div className="box demo">
+                <div className="form">
+                    <Input
+                        id="forced-rerendering-text"
+                        label="Demonstrate memoized components"
+                        value={forcedRerenderingText}
+                        placeholder="Type anything"
+                        onChange={onForcedRerenderingTextChange}
+                    />
+                </div>
+            </div>
         </main>
     );
 };
